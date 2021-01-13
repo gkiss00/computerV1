@@ -33,7 +33,7 @@ def c_pow(a, b):
 #work with integer only and perfect square
 def c_sqrt(nb):
     final_result = 0.0
-    ratio = 1
+    ratio = 0
     div = 10
     rest = 0.0
     pair_list = getList(nb)
@@ -47,19 +47,23 @@ def c_sqrt(nb):
         #get actual number
         pair_list[i] = (rest * 100) + pair_list[i]
         #n : number of the bigger square found
-        n = findBiggerSquare(pair_list[i], ratio)
+        n = findBiggerSquare(pair_list[i], ratio * 2)
         #rest : rest of the divison
-        rest = pair_list[i] - c_pow(n, 2)
+        if ratio == 0:
+            tmp = n * n
+        else:
+            tmp = ((int(ratio * 2) * (getNumberRange(n) * 10 )) + n) * n
+        rest = pair_list[i] - tmp
+        #update ratio
+        ratio = (ratio * (getNumberRange(n) * 10)) + n
         #if we are in int
         if (i < point):
             _range = getNumberRange(n) * 10
             final_result = (final_result * _range) + n
-            ratio = final_result * 2
-            #if we are in float
+        #if we are in float
         else:
             final_result = final_result + (n / div)
-            ratio = (final_result * div) * 2
-            div *= div * 100
+            div *= 10
     return final_result
 
 #utils
@@ -113,17 +117,28 @@ def getPointPlace(nb):
         size = int((size / 2)) + 1
     return size
 
-#find the bigger number wich the square fit in the number 10 -> 3, 30 -> 5, ...
+def getPointSize(nb):
+    size = 0
+    nb = nb - int(float(nb))
+    while nb != 0:
+        nb = nb * 10
+        tmp = int(nb)
+        tmp = tmp + 0.0
+        nb -= tmp
+        size += 1
+    return (size)
+
+#utils find the bigger number wich the square fit in the number 10 -> 3, 30 -> 5, ...
 def findBiggerSquare(nb, ratio):
     max_sqrt = 0
     for i in range(int(nb + 1)):
         tmp = 0
-        if ratio != 1:
-            tmp = ((int(ratio) * (getNumberRange(i) * 10 ) + i) * i)
+        if ratio != 0:
+            tmp = ((int(ratio) * (getNumberRange(i) * 10 )) + i) * i
         else:
             tmp = i * i
         if tmp <= nb and tmp > max_sqrt:
             max_sqrt = (i)
-        if tmp > nb:
+        if tmp >= nb:
             break
     return (max_sqrt)
