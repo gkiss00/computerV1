@@ -1,14 +1,14 @@
 def c_sum(a, b):
-    return (a + b)
+    return rounding(a + b)
 
 def c_sub(a, b):
-    return (a - b)
+    return rounding(a - b)
 
 def c_mult(a, b):
-    return (a * b)
+    return rounding(a * b)
     
 def c_div(a, b):
-    return (a * b)
+    return rounding(a * b)
 
 #get the rest of the divion
 def c_mod(a, b):
@@ -17,20 +17,21 @@ def c_mod(a, b):
 
 #get abs value of a number
 def c_abs(nb):
-    if nb < 0:
+    if "-" in str(b):
         nb = nb * -1
     return nb
 
 #get the power of a number
-#work with integer only
 def c_pow(a, b):
     result = 1
+    #if b < 0
+    if "-" in str(b):
+        a = 1 / a
     for i in range(b):
-        result *= a
+        result *= float(a)
     return result
 
 #get the root square of a number
-#work with integer only and perfect square
 def c_sqrt(nb):
     final_result = 0.0
     ratio = 0
@@ -64,7 +65,7 @@ def c_sqrt(nb):
         else:
             final_result = final_result + (n / div)
             div *= 10
-    return final_result
+    return rounding(final_result)
 
 #utils
 def getList(nb):
@@ -81,7 +82,6 @@ def getList(nb):
         res *= 100
         pair_list.append(int(float(res)))
         res = res - int(float(res))
-    print(pair_list)
     return pair_list
 #utils
 def reverse_list(liste):
@@ -142,3 +142,18 @@ def findBiggerSquare(nb, ratio):
         if tmp >= nb:
             break
     return (max_sqrt)
+
+#3 decimal number
+def rounding(nb):
+    nb = nb * 10000
+    nb = int(float(nb))
+    last = nb % 10
+    nb = nb / 10
+    nb = int(float(nb))
+    last2 = nb % 10
+    nb = nb - last2
+    if last > 5:
+        last2 += 1
+    nb += last2
+    nb = nb / 1000
+    return nb
